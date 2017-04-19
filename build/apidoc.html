@@ -1,0 +1,419 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/cayasso/mongo-oplog"
+
+    >mongo-oplog (v2.0.2)</a>
+</h1>
+<h4>Watch mongodb oplog in a simple way</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.mongo-oplog">module mongo-oplog</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.mongo-oplog.mongo-oplog">
+            function <span class="apidocSignatureSpan"></span>mongo-oplog
+            <span class="apidocSignatureSpan">(uri)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">mongo-oplog.</span>filter</span>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">mongo-oplog.</span>stream</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.mongo-oplog.filter">module mongo-oplog.filter</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.mongo-oplog.filter.default">
+            function <span class="apidocSignatureSpan">mongo-oplog.filter.</span>default
+            <span class="apidocSignatureSpan">(ns, oplog)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.mongo-oplog.filter.regex">
+            function <span class="apidocSignatureSpan">mongo-oplog.filter.</span>regex
+            <span class="apidocSignatureSpan">(pattern)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.mongo-oplog.stream">module mongo-oplog.stream</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.mongo-oplog.stream.default">
+            function <span class="apidocSignatureSpan">mongo-oplog.stream.</span>default
+            <span class="apidocSignatureSpan">(_x)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.mongo-oplog" id="apidoc.module.mongo-oplog">module mongo-oplog</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.mongo-oplog.mongo-oplog" id="apidoc.element.mongo-oplog.mongo-oplog">
+        function <span class="apidocSignatureSpan"></span>mongo-oplog
+        <span class="apidocSignatureSpan">(uri)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">mongo-oplog = function (uri) {
+  var connect = function () {
+    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              if (!connected) {
+                _context.next = 2;
+                break;
+              }
+
+              return _context.abrupt(&#x27;return&#x27;, db);
+
+            case 2:
+              _context.next = 4;
+              return _mongodb.MongoClient.connect(uri, opts);
+
+            case 4:
+              db = _context.sent;
+
+              connected = true;
+
+            case 6:
+            case &#x27;end&#x27;:
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    }));
+
+    return function connect() {
+      return _ref.apply(this, arguments);
+    };
+  }();
+
+  var tail = function () {
+    var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+
+              debug(&#x27;Connected to oplog database&#x27;);
+              _context2.next = 4;
+              return connect();
+
+            case 4:
+              _context2.next = 6;
+              return (0, _stream2.default)({ ns: ns, coll: coll, ts: ts, db: db });
+
+            case 6:
+              stream = _context2.sent;
+
+              stream.on(&#x27;end&#x27;, onend);
+              stream.on(&#x27;data&#x27;, ondata);
+              stream.on(&#x27;error&#x27;, onerror);
+              return _context2.abrupt(&#x27;return&#x27;, stream);
+
+            case 13:
+              _context2.prev = 13;
+              _context2.t0 = _context2[&#x27;catch&#x27;](0);
+
+              onerror(_context2.t0);
+
+            case 16:
+            case &#x27;end&#x27;:
+              return _context2.stop();
+          }
+        }
+      }, _callee2, this, [[0, 13]]);
+    }));
+
+    return function tail() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var stop = function () {
+    var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
+      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              if (stream) stream.destroy();
+              debug(&#x27;streaming stopped&#x27;);
+              return _context3.abrupt(&#x27;return&#x27;, oplog);
+
+            case 3:
+            case &#x27;end&#x27;:
+              return _context3.stop();
+          }
+        }
+      }, _callee3, this);
+    }));
+
+    return function stop() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  var destroy = function () {
+    var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4() {
+      return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.next = 2;
+              return stop();
+
+            case 2:
+              _context4.next = 4;
+              return db.close(true);
+
+            case 4:
+              connected = false;
+              return _context4.abrupt(&#x27;return&#x27;, oplog);
+
+            case 6:
+            case &#x27;end&#x27;:
+              return _context4.stop();
+          }
+        }
+      }, _callee4, this);
+    }));
+
+    return function destroy() {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+
+  var options = arguments.length &#x3e; 1 &#x26;&#x26; arguments[1] !== undefined ? arguments[1] : {};
+
+  var db = void 0;
+  var stream = void 0;
+  var connected = false;
+
+  var ns = options.ns,
+      since = options.since,
+      coll = options.coll,
+      opts = _objectWithoutProperties(options, [&#x27;ns&#x27;, &#x27;since&#x27;, &#x27;coll&#x27;]);
+
+  var oplog = new _eventemitter2.default();
+
+  var ts = since || 0;
+  uri = uri || MONGO_URI;
+
+  if (typeof uri !== &#x27;string&#x27;) {
+    if (uri &#x26;&#x26; uri.collection) {
+      db = uri;
+      connected = true;
+    } else {
+      throw new Error(&#x27;Invalid mongo db.&#x27;);
+    }
+  }
+
+  function filter(ns) {
+    return (0, _fil ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.mongo-oplog.filter" id="apidoc.module.mongo-oplog.filter">module mongo-oplog.filter</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.mongo-oplog.filter.default" id="apidoc.element.mongo-oplog.filter.default">
+        function <span class="apidocSignatureSpan">mongo-oplog.filter.</span>default
+        <span class="apidocSignatureSpan">(ns, oplog)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">default = function (ns, oplog) {
+  var debug = (0, _debug2.default)(&#x27;mongo-oplog:filter&#x27;);
+  var filter = new _eventemitter2.default();
+  var re = regex(ns);
+
+  debug(&#x27;initializing filter with re %s&#x27;, ns);
+
+  function onop(doc) {
+    if (!re.test(doc.ns) || filter.ignore) return;
+    debug(&#x27;incoming data %j&#x27;, doc);
+    filter.emit(&#x27;op&#x27;, doc);
+    filter.emit(_.events[doc.op], doc);
+  }
+
+  function destroy() {
+    debug(&#x27;removing filter bindings&#x27;);
+    oplog.removeListener(&#x27;op&#x27;, onop);
+    filter.removeAllListeners();
+  }
+
+  oplog.on(&#x27;op&#x27;, onop);
+
+  return Object.assign(filter, { destroy: destroy });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+pattern = pattern || &#x27;*&#x27;;
+pattern = pattern.replace(/[*]/g, &#x27;(.*?)&#x27;);
+return new RegExp(&#x27;^&#x27; + pattern + &#x27;$&#x27;, &#x27;i&#x27;);
+}
+
+exports.default = function (ns, oplog) {
+var debug = (0, _debug2.default)(&#x27;mongo-oplog:filter&#x27;);
+var filter = new _eventemitter2.<span class="apidocCodeKeywordSpan">default</span>();
+var re = regex(ns);
+
+debug(&#x27;initializing filter with re %s&#x27;, ns);
+
+function onop(doc) {
+  if (!re.test(doc.ns) || filter.ignore) return;
+  debug(&#x27;incoming data %j&#x27;, doc);
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.mongo-oplog.filter.regex" id="apidoc.element.mongo-oplog.filter.regex">
+        function <span class="apidocSignatureSpan">mongo-oplog.filter.</span>regex
+        <span class="apidocSignatureSpan">(pattern)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function regex(pattern) {
+  pattern = pattern || &#x27;*&#x27;;
+  pattern = pattern.replace(/[*]/g, &#x27;(.*?)&#x27;);
+  return new RegExp(&#x27;^&#x27; + pattern + &#x27;$&#x27;, &#x27;i&#x27;);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.mongo-oplog.stream" id="apidoc.module.mongo-oplog.stream">module mongo-oplog.stream</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.mongo-oplog.stream.default" id="apidoc.element.mongo-oplog.stream.default">
+        function <span class="apidocSignatureSpan">mongo-oplog.stream.</span>default
+        <span class="apidocSignatureSpan">(_x)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">default = function (_x) {
+  return _ref.apply(this, arguments);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+pattern = pattern || &#x27;*&#x27;;
+pattern = pattern.replace(/[*]/g, &#x27;(.*?)&#x27;);
+return new RegExp(&#x27;^&#x27; + pattern + &#x27;$&#x27;, &#x27;i&#x27;);
+}
+
+exports.default = function (ns, oplog) {
+var debug = (0, _debug2.default)(&#x27;mongo-oplog:filter&#x27;);
+var filter = new _eventemitter2.<span class="apidocCodeKeywordSpan">default</span>();
+var re = regex(ns);
+
+debug(&#x27;initializing filter with re %s&#x27;, ns);
+
+function onop(doc) {
+  if (!re.test(doc.ns) || filter.ignore) return;
+  debug(&#x27;incoming data %j&#x27;, doc);
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
